@@ -1,15 +1,18 @@
-describe "cadastro" do
+describe "post" do
+    context "quando cadastro um novo usuario" do
+      before do 
+        @new_user = {full_name: "Test skywalker", email: "test@jedi.com", password: "jedi123"}
+        Database.new.delete_user(@new_user[:email])
 
-  it "novo usuario" do
+        @result = HTTParty.post(
+          "http://127.0.0.1:3000/user",
+          body: @new_user.to_json,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+      end
 
-    Database.new.delete_user("me1@papito.io")
-
-    result = HTTParty.post("http://127.0.0.1:3000/user", 
-    body: {full_name: "Fernando Papito", email: "me1@papito.io", password: "jarvis123"}.to_json,
-    headers: {
-      "Content-Type" => "application/json"
-    })
-
-    expect(result.response.code).to eql "200"
-  end
+      it {expect(@result.response.code).to eql "200"}
+    end
 end
