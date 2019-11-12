@@ -15,4 +15,8 @@ class Database
     " from public.users where email = '#{email}';"
     @connection.exec(query).first
   end
+
+  def clean_db
+    @connection.exec("DELETE from public.users where id > 1;")
+  end
 end
